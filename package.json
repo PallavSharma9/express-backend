@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/PallavSharma9/express-backend/issues"
   },
-  "homepage": "https://github.com/PallavSharma9/express-backend#readme"
+  "homepage": "https://github.com/PallavSharma9/express-backend#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }
