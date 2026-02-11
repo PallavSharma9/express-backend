@@ -1,15 +1,5 @@
-// initializing package.json with npm init -y
-// installing express package by command npm install express
-const express = require("express");
+import app from "./src/app.js";
 
-const app = express();
-
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
 });
-
-app.get("/about", (req, res) => {
-  res.send("About Page");
-});
-
-app.listen(3000);
