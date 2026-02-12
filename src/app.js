@@ -30,13 +30,15 @@ app.get("/notes", async (req, res) => {
   });
 });
 
-app.delete("/notes/:id", (req, res) => {
-  const index = req.params.id;
+app.delete("/notes/:id", async (req, res) => {
+  const id = req.params.id;
 
-  notes.splice(index, 1);
+  await noteModel.findOneAndDelete({
+    _id: id,
+  });
 
-  res.status(200).json({
-    message: "selected task has been deleted",
+  res.json({
+    message: "Note deleted successfully",
   });
 });
 
