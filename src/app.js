@@ -1,4 +1,5 @@
 import express from "express";
+import { noteModel } from "./models/note.model.js";
 
 const notes = [];
 
@@ -6,11 +7,17 @@ const app = express();
 
 app.use(express.json());
 
-app.post("/notes", (req, res) => {
-  notes.push(req.body);
+app.post("/notes", async (req, res) => {
+  const body = req.body;
 
-  res.status(200).json({
-    message: "Note has been added to notes.",
+  const note = await noteModel.create({
+    title: body.title,
+    description: body.description,
+  });
+
+  res.status(201).json({
+    message: "Note created successfully",
+    data: note,
   });
 });
 
