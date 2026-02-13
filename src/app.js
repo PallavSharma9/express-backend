@@ -1,60 +1,40 @@
 import express from "express";
-import { noteModel } from "./models/note.model.js";
-
-const notes = [];
+import postModel from "./models/post.model.js";
+import multer from "multer";
+import { uploadFile } from "./services/storage.service.js";
 
 const app = express();
-
 app.use(express.json());
+const storage = multer.memoryStorage();
 
-app.post("/notes", async (req, res) => {
-  const body = req.body;
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, //5MB
+});
 
-  const note = await noteModel.create({
-    title: body.title,
-    description: body.description,
+app.post("/create-post", upload.single("image"), async (req, res) => {
+  console.log(req.body);
+  console.log(req.file);
+
+  const result = await uploadFile(req.file);
+
+  const post = await postModel.create({
+    image: result.url,
+    caption: req.body.caption,
   });
 
-  res.status(201).json({
-    message: "Note created successfully",
-    data: note,
+  return res.status(201).json({
+    message: "Post created successfully",
+    post,
   });
 });
 
-app.get("/notes", async (req, res) => {
-  const notes = await noteModel.find();
-
-  res.status(200).json({
-    message: "Notes fetched successfully",
-    notes,
+app.get("/posts", async (req, res) => {
+  const posts = await postModel.find();
+  return res.json({
+    message: "posts fetched successfully",
+    posts,
   });
 });
 
-app.delete("/notes/:id", async (req, res) => {
-  const id = req.params.id;
-
-  await noteModel.findOneAndDelete({
-    _id: id,
-  });
-
-  res.json({
-    message: "Note deleted successfully",
-  });
-});
-
-app.patch("/notes/:id", (req, res) => {
-  const description = req.body.description;
-
-  const index = Number(req.params.id);
-
-  if (index < 0 || index > notes.length) {
-    return res.status(404).json({
-      message: "data does not exist",
-    });
-  }
-
-  notes[index].description = description;
-
-  res.status(200).json("description has been updated");
-});
 export default app;

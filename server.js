@@ -1,14 +1,20 @@
 import dns from "node:dns/promises";
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
-// Force reliable DNS resolvers due to SRV resolution issues on local network
-import dotenv from "dotenv";
-dotenv.config();
-import { connectDB } from "./src/db/db.js";
+dns.setServers([
+  "1.1.1.1", // Cloudflare
+  "8.8.8.8", // Google
+]);
+
+import "dotenv/config";
 
 import app from "./src/app.js";
+import { connectDB } from "./src/db/db.js";
 
-await connectDB();
+async function startServer() {
+  await connectDB();
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
-});
+  app.listen(3000, () => {
+    console.log("server is running on port 3000");
+  });
+}
+
+startServer();
