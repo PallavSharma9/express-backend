@@ -1,11 +1,11 @@
 import express from "express";
 import { registerUser } from "../controllers/auth.controller.js";
 
-const router = express.Router();
+const authRouter = express.Router();
 
-router.post("/register", registerUser);
+authRouter.post("/register", registerUser);
 
-router.get("/test", (req, res) => {
+authRouter.get("/test", (req, res) => {
   console.log("Cookie: ", req.cookies);
   res.json({
     message: "Test route",
@@ -13,4 +13,4 @@ router.get("/test", (req, res) => {
   });
 });
 
-export default router;
+export default authRouter;
