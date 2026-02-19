@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const musicSchema = new mongoose.Schema({
-  uri: {
+  url: {
     type: String,
     required: true,
   },
